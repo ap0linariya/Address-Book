@@ -2,8 +2,11 @@ from flask import Blueprint, request
 
 from models import PhoneModel, db
 
+#разделение кода
 phone_bp = Blueprint('phone_bp', __name__)
 
+
+#Вывод информации о выбранном по id номере телефона
 def read():
     id = request.args.get('id')
     number_phone = PhoneModel.query.get(id)
@@ -16,6 +19,7 @@ def read():
     return {"message": "success", "number_phone": results}
 
 
+#Создание нового номера телефона
 def create():
     if request.is_json:
         data = request.get_json()
@@ -27,6 +31,7 @@ def create():
         return {"error": "The request payload is not in JSON format"}
 
 
+#Фильтрация номеров телефона по id пользователя и сортировка по выбранному параметру
 def show():
     user_id = request.args.get('user_id')
     order_by = request.args.get('order_by')
@@ -60,6 +65,7 @@ def show():
     return {"number_phones": results, "message": "success"}
 
 
+#Редактирование выбранного по id номера телефона
 def update():
     data = request.get_json()
     number_phone = PhoneModel.query.get_or_404(data['id'])
@@ -73,6 +79,7 @@ def update():
     return {"message": f"Number phone  {number_phone.number} successfully updated"}
 
 
+#Удаление выбранного по id номера телефона
 def delete():
     id = request.args.get('id')
     number_phone = PhoneModel.query.get_or_404(id)

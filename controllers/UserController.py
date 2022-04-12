@@ -2,9 +2,10 @@ from flask import Blueprint, request
 
 from models import UserModel, db
 
-
+#разделение кода
 user_bp = Blueprint('user_bp', __name__)
 
+#Вывод информации о выбранном по id пользователе
 def read():
     id = request.args.get('id')
     user = UserModel.query.get(id)
@@ -19,6 +20,7 @@ def read():
     return {"message": "success", "user": results}
 
 
+#Создание нового пользователя
 def create():
     if request.is_json:
         data = request.get_json()
@@ -30,6 +32,7 @@ def create():
         return {"error": "The request payload is not in JSON format"}
 
 
+# Фильтрация пользователей по полу и сортировка по выбранному параметру
 def show():
     gender = request.args.get('gender')
     order_by = request.args.get('order_by')
@@ -69,6 +72,7 @@ def show():
     return {"users": results, "message": "success"}
 
 
+#Редактирование выбранного по id пользователя
 def update():
     data = request.get_json()
     user = UserModel.query.get(data['id'])
@@ -84,6 +88,7 @@ def update():
     return {"message": f"User {user.full_name} successfully updated"}
 
 
+#Удаление выбранного по id пользователя
 def delete():
     id = request.args.get('id')
     user = UserModel.query.get(id)

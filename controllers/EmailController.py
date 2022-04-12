@@ -2,8 +2,11 @@ from flask import Blueprint, request
 
 from models import EmailModel, db
 
+#разделение кода
 email_bp = Blueprint('email_bp', __name__)
 
+
+#Вывод информации о выбранном по id эл. адресе
 def read():
     id = request.args.get('id')
     email = EmailModel.query.get(id)
@@ -17,6 +20,7 @@ def read():
     return {"message": "success", "email": results}
 
 
+#Создание нового эл. адреса
 def create():
     if request.is_json:
         data = request.get_json()
@@ -28,6 +32,7 @@ def create():
         return {"error": "The request payload is not in JSON format"}
 
 
+# Фильтрация эл. адресов по id пользователя и сортировка по выбранному параметру
 def show():
     user_id = request.args.get('user_id')
     order_by = request.args.get('order_by')
@@ -60,7 +65,7 @@ def show():
 
     return {"number_phones": results, "message": "success"}
 
-
+#Редактирование выбранного по id эл. адреса
 def update():
     data = request.get_json()
     email = EmailModel.query.get(data['id'])
@@ -71,14 +76,15 @@ def update():
 
     db.session.add(email)
     db.session.commit()
-    return {"message": f"Email {email.number} successfully updated"}
+    return {"message": f"Email {email.email} successfully updated"}
 
 
+#Удаление выбранного по id эл. адреса
 def delete():
     id = request.args.get('id')
     email = EmailModel.query.get(id)
     db.session.delete(email)
     db.session.commit()
 
-    return {"message": f"Email  {email.number} successfully deleted."}
+    return {"message": f"Email  {email.email} successfully deleted."}
 
